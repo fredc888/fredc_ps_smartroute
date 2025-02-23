@@ -28,6 +28,8 @@ class BSSScorer : RouteScorer {
         internal val DEBUG_DRIVER_CONSONANTS = "driver.consonants";
         internal val DEBUG_GCF = "gcf";
         internal val DEBUG_SCORE_0 = "score.0";
+        internal val DEBUG_SCORE = "score";
+
     }
 
 
@@ -75,7 +77,8 @@ class BSSScorer : RouteScorer {
         if ( gcf> 1) {
             score += 0.5 * score;
         }
+        debugInfo?.put(DEBUG_SCORE,score.toString());
 
-        return RouteScore(score, debugInfo);
+        return RouteScore(driver, destination,score, debugInfo);
     }
 }

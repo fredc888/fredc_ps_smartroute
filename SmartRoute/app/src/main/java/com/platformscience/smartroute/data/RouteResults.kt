@@ -10,11 +10,13 @@ enum class RouteResultCode {
  * @pqram resultCode:
  */
 data class RouteResults(
+    val routeScores: RouteScoreMap,
     val resultCode: RouteResultCode = RouteResultCode.SUCCESS,
     val routes: IntArray? = null,
     val error: Exception? = null
 ) {
-    constructor(error: Exception) : this(
+    constructor(routeScores: RouteScoreMap, error: Exception) : this(
+        routeScores=routeScores,
         resultCode = RouteResultCode.FAIL,
         error = error,
         routes = null

@@ -13,6 +13,7 @@ import com.platformscience.smartroute.BssTestData.driverTestData;
 import com.platformscience.smartroute.BssTestData.destinationTestData;
 
 import com.platformscience.smartroute.BssTestData;
+import com.platformscience.smartroute.BssTestData.KEY_GCF
 import com.platformscience.smartroute.data.RouteScore
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -57,11 +58,12 @@ class BssScorerTest {
 
 
 
-        for (driverKey in driverTestData.keys) {
-            for (destinationKey in destinationTestData.keys) {
+        for ((driverIndex,driverKey) in driverTestData.keys.withIndex()) {
+            for ((destIndex, destinationKey) in destinationTestData.keys.withIndex()) {
                 val driver = Driver(driverKey);
                 val destination = Destination(destinationKey);
                 val score = scorer.score(driver, destination);
+                System.out.println("Driver and Destination Index ${driverIndex}: ${destIndex}")
                 checkScore(driver, destination, score);
             }
         }
@@ -86,6 +88,7 @@ class BssScorerTest {
             destinationExpectedResult!!.get(BssTestData.KEY_DEST_LENGTHEVEN),
             score.debugInfo?.get(BSSScorer.DEBUG_DEST_LENGTHEVEN));
 System.out.println();
+
         //Based on destination odd/even rule, check if driver vowel or consonant dependency is set
         if ("true".equals(destinationExpectedResult?.get(BssTestData.KEY_DEST_LENGTHEVEN))) {
             //Check driver's vowel count
@@ -109,6 +112,12 @@ System.out.println();
                 score.debugInfo?.get(BSSScorer.DEBUG_DRIVER_CONSONANTS));
 
         }
+
+        //Check gcf
+        val expectedGCF = BssTestData.getMappedData(driver.name,destination.address, KEY_GCF);
+        val actualGCF = score.debugInfo?.get(BSSScorer.DEBUG_GCF);
+        System.out.println("Getting GCF for Driver ${driver.name}, Destination ${destination.address} ");
+        assertEquals ("Driver ${driver.name}, Destination ${destination.address} unexpected GCF", expectedGCF, actualGCF);
 
 
     }
