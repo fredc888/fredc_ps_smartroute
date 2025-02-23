@@ -1,10 +1,8 @@
 package com.platformscience.smartroute.resolver
 
-import com.platformscience.smartroute.data.Destination
+import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteResults
-import com.platformscience.smartroute.data.RouteRequest
-import com.platformscience.smartroute.data.RouteScore
 import com.platformscience.smartroute.data.RouteScoreMap
 
 /*
@@ -18,6 +16,6 @@ interface RouteResolver {
      * @param RouteResults returned optimal results for each driuer
      */
     fun resolve(drivers:Set<Driver>,
-                destinations:Set<Destination>,
+                shipments:Set<Shipment>,
                 routeScores: RouteScoreMap): RouteResults;
 }

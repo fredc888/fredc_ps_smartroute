@@ -5,13 +5,13 @@ package com.platformscience.smartroute.data
  *
  */
 data class RouteScore(
-                        val driver: Driver,
-                        val destination: Destination,
-                        val score: Double,
-                        val debugInfo:Map<String,String>?){
-    constructor(driver: Driver,destination:Destination,score: Double) : this(
+    val driver: Driver,
+    val shipment: Shipment,
+    val score: Double,
+    val debugInfo:Map<String,String>?){
+    constructor(driver: Driver, shipment:Shipment, score: Double) : this(
         driver=driver,
-        destination=destination,
+        shipment=shipment,
         score = score,
         debugInfo = null
     );

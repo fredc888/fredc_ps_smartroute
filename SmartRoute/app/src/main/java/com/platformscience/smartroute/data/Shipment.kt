@@ -1,5 +1,5 @@
 package com.platformscience.smartroute.data
 
-data class Destination(val address: String) {
+data class Shipment(val address: String) {
 
 }

@@ -10,16 +10,21 @@ enum class RouteResultCode {
  * @pqram resultCode:
  */
 data class RouteResults(
+    val drivers: Set<Driver>,
+    val shipments: Set<Shipment>,
     val routeScores: RouteScoreMap,
     val resultCode: RouteResultCode = RouteResultCode.SUCCESS,
-    val routes: IntArray? = null,
+    val routeIndexes: IntArray? = null,
     val error: Exception? = null
 ) {
-    constructor(routeScores: RouteScoreMap, error: Exception) : this(
+    constructor(drivers:Set<Driver>, shipments:Set<Shipment>,
+                routeScores: RouteScoreMap, error: Exception) : this(
+        drivers=drivers,
+        shipments=shipments,
         routeScores=routeScores,
         resultCode = RouteResultCode.FAIL,
         error = error,
-        routes = null
+        routeIndexes = null
     );
 
     /**
@@ -27,23 +32,28 @@ data class RouteResults(
      */
     val size: Int
         get() {
-            return routes?.size ?: 0;
+            return routeIndexes?.size ?: 0;
         }
+
+    fun getRouteScore(driver:Driver, shipment: Shipment):RouteScore? {
+        return routeScores.getRouteScore(driver,shipment);
+    }
+
+    fun getOptimalShipment(driver:Driver):Shipment {
+        val driverIndex = drivers.indexOf(driver);
+        val destinationIndex = getOptimalShipment(driverIndex);
+        return shipments.elementAt(destinationIndex);
+    }
 
     /**
      * Returns the route of the specified driver
      */
-    fun getRoute(index: Int): Int? {
-        return routes?.get(index);
+    fun getOptimalShipment(driverIndex: Int): Int {
+        var result= routeIndexes?.get(driverIndex);
+        if (result == null) {
+            result = -1;
+        }
+        return result;
     }
 
-    /**
-     * Print the list of routes to the specified buffer for debugging
-     *
-     */
-    fun printRoutes(buffer: StringBuilder) {
-        routes?.forEachIndexed { i, route ->
-            buffer.append("${i} : ${route}\n")
-        }
-    }
 }

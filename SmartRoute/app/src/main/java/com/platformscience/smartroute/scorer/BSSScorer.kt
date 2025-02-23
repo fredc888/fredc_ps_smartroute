@@ -1,6 +1,6 @@
 package com.platformscience.smartroute.scorer
 
-import com.platformscience.smartroute.data.Destination
+import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteScore
 import com.platformscience.smartroute.util.MathUtil
@@ -39,14 +39,14 @@ class BSSScorer : RouteScorer {
      */
 
 
-    override fun score(driver: Driver, destination: Destination): RouteScore {
+    override fun score(driver: Driver, shipment: Shipment): RouteScore {
         //debugInfo is for debugging and troubleshooting
         //and conditionally assigned if debugging is turned on
 
         val debugInfo: HashMap<String,String>? = if (DEBUG) HashMap<String,String>() else null;
 
         var score = 0.0;
-        val destinationLength = destination.address.length;
+        val destinationLength = shipment.address.length;
         val driverNameLength = driver.name.length;
         val isDestLengthEven = (destinationLength % 2 == 0);
 
@@ -79,6 +79,6 @@ class BSSScorer : RouteScorer {
         }
         debugInfo?.put(DEBUG_SCORE,score.toString());
 
-        return RouteScore(driver, destination,score, debugInfo);
+        return RouteScore(driver, shipment,score, debugInfo);
     }
 }

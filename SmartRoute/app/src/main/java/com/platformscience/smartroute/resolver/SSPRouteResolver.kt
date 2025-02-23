@@ -1,6 +1,6 @@
 package com.platformscience.smartroute.resolver
 
-import com.platformscience.smartroute.data.Destination
+import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteResults
 import com.platformscience.smartroute.data.RouteScoreMap
@@ -19,12 +19,12 @@ class SSPRouteResolver : RouteResolver {
         return score*-1;
     }
 
-    private fun createRouteScoreMatrix(drivers:Set<Driver>,
-                                       destinations:Set<Destination>,
-                                       routeScores: RouteScoreMap): Array<DoubleArray> {
-        val scoreMatrix = Array(drivers.size) { DoubleArray(destinations.size) { 0.0 } }
+    internal fun createRouteScoreMatrix(drivers:Set<Driver>,
+                                        shipments:Set<Shipment>,
+                                        routeScores: RouteScoreMap): Array<DoubleArray> {
+        val scoreMatrix = Array(drivers.size) { DoubleArray(shipments.size) { 0.0 } }
         drivers.forEachIndexed { driverIndex, driver ->
-            destinations.forEachIndexed { destinationIndex, destination ->
+            shipments.forEachIndexed { destinationIndex, destination ->
                 val routeScore= routeScores.getRouteScore(driver,destination);
                 if (routeScore != null) {
                     scoreMatrix[driverIndex][destinationIndex]=transformScore(routeScore.score);
@@ -35,22 +35,30 @@ class SSPRouteResolver : RouteResolver {
     }
 
 
-    override fun resolve( drivers:Set<Driver>,
-                          destinations:Set<Destination>,
-                          routeScores: RouteScoreMap): RouteResults {
+    override fun resolve(drivers:Set<Driver>,
+                         shipments:Set<Shipment>,
+                         routeScores: RouteScoreMap): RouteResults {
         try {
-            val scoreMatrix = createRouteScoreMatrix(drivers,destinations,routeScores);
+            val scoreMatrix = createRouteScoreMatrix(drivers,shipments,routeScores);
 
             val assignmentEngine = AssignmentProblem(scoreMatrix);
-            val routeSize  = destinations.size;
+            val routeSize  = shipments.size;
             val routes = IntArray(routeSize);
             for (i in 0 until routeSize) {
                 routes[i] = assignmentEngine.sol(i);
             }
 
-            return RouteResults(routeScores=routeScores, routes = routes);
+            return RouteResults(
+                drivers=drivers,
+                shipments=shipments,
+                routeScores=routeScores,
+                routeIndexes = routes);
         } catch (e: IllegalArgumentException) {
-            return RouteResults(routeScores=routeScores, error = e);
+            return RouteResults(
+                drivers=drivers,
+                shipments=shipments,
+                routeScores=routeScores,
+                error = e);
         }
     }
 }
