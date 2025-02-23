@@ -6,6 +6,7 @@ import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteRequest
 import com.platformscience.smartroute.data.Shipment
 import java.io.BufferedReader
+import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.URL
@@ -26,7 +27,13 @@ object ShipmentInfoReader {
         return readShipmentInfo(assetReader);
     }
 
-    fun readShipmentInfo(shipmentInfoReader:BufferedReader):RouteRequest{
+    /*
+    fun readShipmentInfo(file:File): RouteRequest {
+        return readShipmentInfo(BufferedReader(file.reader()));
+    }
+    */
+
+    private fun readShipmentInfo(shipmentInfoReader:BufferedReader):RouteRequest{
         try {
              val gson = Gson();
             val shipmentInfo: ShipmentInfo = gson.fromJson(shipmentInfoReader, ShipmentInfo::class.java);
