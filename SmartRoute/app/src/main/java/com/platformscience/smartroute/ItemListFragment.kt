@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.platformscience.smartroute.data.RouteResults
 import com.platformscience.smartroute.placeholder.PlaceholderContent;
 import com.platformscience.smartroute.databinding.FragmentItemListBinding
 import com.platformscience.smartroute.databinding.ItemListContentBinding
@@ -85,22 +86,35 @@ class ItemListFragment : Fragment() {
         setupRecyclerView(recyclerView, itemDetailFragmentContainer)
     }
 
+
+    fun onRouteResultChanged(results: RouteResults){
+
+    }
+
     private fun setupRecyclerView(
         recyclerView: RecyclerView,
         itemDetailFragmentContainer: View?
     ) {
 
         recyclerView.adapter = SimpleItemRecyclerViewAdapter(
-            PlaceholderContent.ITEMS, itemDetailFragmentContainer
+            values = PlaceholderContent.ITEMS,
+            itemDetailFragmentContainer = itemDetailFragmentContainer
         )
     }
 
     class SimpleItemRecyclerViewAdapter(
+        private var routeResults:RouteResults?=null,
         private val values: List<PlaceholderContent.PlaceholderItem>,
         private val itemDetailFragmentContainer: View?
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
 
+        fun updateRouteResults(routeResults: RouteResults) {
+            this.routeResults = routeResults;
+
+            notifyDataSetChanged();
+
+        }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
             val binding =
@@ -120,7 +134,7 @@ class ItemListFragment : Fragment() {
                     val item = itemView.tag as PlaceholderContent.PlaceholderItem
                     val bundle = Bundle()
                     bundle.putString(
-                        ItemDetailFragment.ARG_ITEM_ID,
+                        DriverRouteDetailFragment.ARG_ITEM_ID,
                         item.id
                     )
                     if (itemDetailFragmentContainer != null) {

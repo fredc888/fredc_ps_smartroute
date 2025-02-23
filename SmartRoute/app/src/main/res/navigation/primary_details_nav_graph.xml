@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/item_detail_fragment"
-        android:name="com.platformscience.smartroute.ItemDetailFragment"
+        android:name="com.platformscience.smartroute.DriverRouteDetailFragment"
         android:label="item_detail"
         tools:layout="@layout/fragment_item_detail">
         <argument

@@ -18,7 +18,7 @@ import com.platformscience.smartroute.databinding.FragmentItemDetailBinding
  * in two-pane mode (on larger screen devices) or self-contained
  * on handsets.
  */
-class ItemDetailFragment : Fragment() {
+class DriverRouteDetailFragment : Fragment() {
 
     /**
      * The placeholder content this fragment is presenting.
