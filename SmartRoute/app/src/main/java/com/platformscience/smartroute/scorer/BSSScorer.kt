@@ -17,7 +17,20 @@ import com.platformscience.smartroute.util.vowels;
  * BSS = BSS + 0.5*BSS
  */
 class BSSScorer : RouteScorer {
-    private val DEBUG=true;
+    //Debugging turned on/off
+    internal var DEBUG = false;
+
+    companion object {
+        internal val DEBUG_DEST_LENGTHEVEN = "dest.lengthEven";
+        internal val DEBUG_DEST_LENGTH = "dest.length";
+        internal val DEBUG_DRIVER_LENGTH = "driver.length";
+        internal val DEBUG_DRIVER_VOWELS = "driver.vowels";
+        internal val DEBUG_DRIVER_CONSONANTS = "driver.consonants";
+        internal val DEBUG_GCF = "gcf";
+        internal val DEBUG_SCORE_0 = "score.0";
+    }
+
+
     /**
      * Returns true if 2 integers have common factors other than 1
      * @TODO: this should be moved into a Math utility function in the future.
@@ -25,16 +38,19 @@ class BSSScorer : RouteScorer {
 
 
     override fun score(driver: Driver, destination: Destination): RouteScore {
+        //debugInfo is for debugging and troubleshooting
+        //and conditionally assigned if debugging is turned on
+
+        val debugInfo: HashMap<String,String>? = if (DEBUG) HashMap<String,String>() else null;
 
         var score = 0.0;
         val destinationLength = destination.address.length;
         val driverNameLength = driver.name.length;
-        val isDestLengthEven = (destinationLength / 2 == 0);
+        val isDestLengthEven = (destinationLength % 2 == 0);
 
-        var debugInfo: HashMap<String,String>?
-        debugInfo = if (DEBUG)? HashMap<String,String>() else null
-
-        //debugInfo.put("isDestLengthEven",isDestLengthEven.toString());
+        debugInfo?.put(DEBUG_DRIVER_LENGTH,driverNameLength.toString());
+        debugInfo?.put(DEBUG_DEST_LENGTH, destinationLength.toString());
+        debugInfo?.put(DEBUG_DEST_LENGTHEVEN,isDestLengthEven.toString());
 
         //Evaluate destination length for even or odd
 
@@ -42,29 +58,24 @@ class BSSScorer : RouteScorer {
         if (isDestLengthEven) {
             //BSS = name's vowel count *1.5
             val vowels = driver.name.vowels();
-            debugInfo.put("vowels",vowels.toString());
+            debugInfo?.put(DEBUG_DRIVER_VOWELS,vowels.toString());
             score = vowels * 1.5;
         }
         //Odd length address
         else {
             //BSS = name's consonants count * 1
             val consonants = driver.name.consonants();
-            debugInfo.put("consonants",consonants.toString());
+            debugInfo?.put(DEBUG_DRIVER_CONSONANTS,consonants.toString());
             score = consonants.toDouble();
         }
-
+        debugInfo?.put(DEBUG_SCORE_0,score.toString());
         //Evaluate destination and name length for common factor other than 1
         val gcf=MathUtil.greatestCommonFactor(destinationLength, driverNameLength);
-        debugInfo.put("gcf",gcf.toString());
+        debugInfo?.put(DEBUG_GCF,gcf.toString());
         if ( gcf> 1) {
             score += 0.5 * score;
         }
 
-        if (DEBUG) {
-            return RouteScore(score, debugInfo);
-        } else {
-            return RouteScore(score, null);
-        }
-
+        return RouteScore(score, debugInfo);
     }
 }

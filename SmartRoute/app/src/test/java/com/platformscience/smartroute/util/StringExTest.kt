@@ -1,60 +1,27 @@
 package com.platformscience.smartroute.util
 
+import com.platformscience.smartroute.BssTestData
 import org.junit.Test
 import com.platformscience.smartroute.util.vowels;
 import com.platformscience.smartroute.util.consonants;
 import org.junit.Assert.assertEquals
 
+//Test data imports
+import com.platformscience.smartroute.BssTestData.driverTestData;
+
 /**
  * Tests for the MathUtil singleton
  */
 class StringExTest {
-    val drivers = arrayOf(
-        "Everado Welch",
-        "Orval Mayert",
-        "Howard Emmerich",
-        "Izaiah Lowe",
-        "Monica Hermann",
-        "Ellis Wisozk",
-        "Noemie Murphy",
-        "Cleve Durgan",
-        "Murphy Mosciski",
-        "Maiser Sose"
-        );
-    val expectedVowels = intArrayOf(
-        5,
-        4,
-        5,
-        6,
-        5,
-        4,
-        6, //Trailing 'y' in at the end considered a vowel
-        4,
-        5, //Trailing 'y' in first word is considered a vowel
-        5
 
-    );
-    val expectedConsonants = intArrayOf(
-        7,
-        7, // The 'y' in "Mayert" should be considered a vowel, but outside the scope currently
-        9,
-        4,
-        8,
-        7,
-        6,
-        7,
-        9,
-        5
-        );
     /**
      * Test the extension function String.vowels()
      */
     @Test
     fun testVowelCount() {
-        drivers.forEachIndexed { i, driver ->
-            testVowelCount(driver, expectedVowels[i])
+        for (driver in driverTestData.keys) {
+            testVowelCount(driver, driverTestData.get(driver)!!.get(BssTestData.KEY_DRIVER_VOWELS)!!.toInt());
         }
-
     }
 
 
@@ -63,10 +30,10 @@ class StringExTest {
      */
     @Test
     fun testConsonantCount() {
-        drivers.forEachIndexed { i, driver ->
-            testConsonantCount(driver, expectedConsonants[i])
-        }
+        for (driver in driverTestData.keys) {
+            testConsonantCount(driver, driverTestData.get(driver)!!.get(BssTestData.KEY_DRIVER_CONSONANTS)!!.toInt());
 
+        }
     }
 
     private fun testVowelCount(s: String, expectedVowelCount: Int) {

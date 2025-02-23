@@ -1,5 +1,4 @@
 package com.platformscience.smartroute.util
-
 /**
  * String class extension functions
  */
@@ -19,12 +18,17 @@ package com.platformscience.smartroute.util
  *
  */
 
+/**
+ * If false, 'y' is always treqted as a consonant
+ */
+const val checkYForVowel = true;
+
 fun String.vowels(): Int {
     var count = 0
     for ((i, ch) in this.lowercase().withIndex()) {
         if (ch == 'a' || ch == 'e' || ch == 'i'
             || ch == 'o' || ch == 'u'
-            || (ch == 'y' && (i == this.length - 1 || this.get(i + 1).isWhitespace()))
+            || (ch == 'y' && checkYForVowel && (i == this.length - 1 || this.get(i + 1).isWhitespace()))
         )
             count++;
     }
@@ -53,7 +57,7 @@ fun String.consonants(): Int {
             || (ch in 'p' until 'u')
             || (ch in 'v' until 'y')
             || (ch == 'z')
-            || (ch == 'y' && i != this.length - 1 && !this.get(i + 1).isWhitespace())
+            || (ch == 'y' && (!checkYForVowel || (i != this.length - 1 && !this.get(i + 1).isWhitespace())))
         )
             count++;
     }
