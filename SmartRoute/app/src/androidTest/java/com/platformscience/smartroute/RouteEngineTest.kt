@@ -1,24 +1,24 @@
-package com.platformscience.smartroute.util
+package com.platformscience.smartroute
 
+import android.util.Log
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
-import com.platformscience.smartroute.data.Driver
-import com.platformscience.smartroute.data.Shipment
+import com.platformscience.smartroute.util.ShipmentInfoReader
 import org.junit.Test;
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 
 /**
  * Tests for the ShipmentInfoReader singleton
  */
-class ShipmentInfoAssetReaderTest {
+class RouteEngineTest {
 
 
 
     @Test
-    fun testReader() {
-        val request = ShipmentInfoReader.readerDefaultShipmentInfoAsset(ApplicationProvider.getApplicationContext());
-        assertEquals("Incorrect driver count ", 10,request.drivers.size);
-        assertEquals("Incorrect shipment count ", 10,request.shipments.size);
-    }
+    fun testRouteEngine() {
+        val request = ShipmentInfoReader.readDefaultShipmentInfoAsset(ApplicationProvider.getApplicationContext());
+        val results = RouteEngine.getRoutes(request);
+
+        results.drivers.forEach { driver->
+            val shipment  = results.getOptimalShipment(driver);
+            Log.d("RouteEngineTest","${driver.name} ==>  ${shipment.address} : Route Score: ${results.getRouteScore(driver,shipment)?.score}" );
+        }}
 }

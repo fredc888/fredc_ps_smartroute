@@ -1,16 +1,14 @@
 package com.platformscience.smartroute.util
 
 import android.content.Context
-import android.util.Log
 import com.google.gson.Gson
-import com.platformscience.smartroute.RouteEngine
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteRequest
-import com.platformscience.smartroute.data.RouteScore
 import com.platformscience.smartroute.data.Shipment
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.net.URL
 
 /**
  * Parse ShipmentInfo Json file into DataObjects
@@ -18,18 +16,24 @@ import java.io.InputStreamReader
 object ShipmentInfoReader {
     val DEFAULT_ASSET_SHIPMENTINFO="shipmentinfo.json";
 
-    fun readerDefaultShipmentInfoAsset(context:Context):RouteRequest {
+    fun readShipmentInfo(url:URL):RouteRequest {
+        val reader = BufferedReader(InputStreamReader(url.openStream()));
+        return readShipmentInfo(reader);
+    }
 
-        var assetReader:BufferedReader?=null;
+    fun readDefaultShipmentInfoAsset(context:Context):RouteRequest {
+        val assetReader = BufferedReader(InputStreamReader(context.assets.open(DEFAULT_ASSET_SHIPMENTINFO)));
+        return readShipmentInfo(assetReader);
+    }
+
+    fun readShipmentInfo(shipmentInfoReader:BufferedReader):RouteRequest{
         try {
-            assetReader = BufferedReader(
-                InputStreamReader(context.assets.open(DEFAULT_ASSET_SHIPMENTINFO)));
-            val gson = Gson();
-            val shipmentInfo: ShipmentInfo = gson.fromJson(assetReader, ShipmentInfo::class.java);
+             val gson = Gson();
+            val shipmentInfo: ShipmentInfo = gson.fromJson(shipmentInfoReader, ShipmentInfo::class.java);
             return toRouteRequest(shipmentInfo);
         } finally {
             try {
-                assetReader?.close()
+                shipmentInfoReader?.close()
             } catch (e: IOException) {
                 println("An error occurred while closing the reader: ${e.message}")
             }

@@ -5,16 +5,22 @@ import com.platformscience.smartroute.data.Shipment
 import org.junit.Test;
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import java.net.URL
 
 /**
  * Tests for the ShipmentInfoReader singleton
  */
 class ShipmentInfoReaderTest {
-
-
+    @Test
+    fun testReaderFromUrl() {
+        val url = URL("https://raw.githubusercontent.com/fredc888/fredc_ps_smartroute/refs/heads/main/SmartRoute/app/src/main/assets/shipmentinfo.json");
+        val request = ShipmentInfoReader.readShipmentInfo(url);
+        assertEquals("Incorrect driver count ", 10,request.drivers.size);
+        assertEquals("Incorrect shipment count ", 10,request.shipments.size);
+    }
 
     @Test
-    fun testReader() {
+    fun testReaderFromString() {
         val shipmentInfoJson = "{   "+
                 "\"shipments\": [ \"address1\" , \"address2\" ]," +
                 "\"drivers\": [ \"driver1\" , \"driver2\" ]" +
