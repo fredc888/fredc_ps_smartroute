@@ -20,7 +20,6 @@ class DriverShipmentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val binding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //setSupportActionBar(findViewById(R.id.my_toolbar))
