@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/item_list_fragment"
-        android:name="com.platformscience.smartroute.ItemListFragment"
+        android:name="com.platformscience.smartroute.DriverListFragment"
         android:label="ItemListFragment">
         <action
             android:id="@+id/show_item_detail"

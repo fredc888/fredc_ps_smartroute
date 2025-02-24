@@ -1,12 +1,8 @@
 package com.platformscience.smartroute
 
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,12 +11,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.platformscience.smartroute.data.RouteRequest
 import com.platformscience.smartroute.databinding.ActivityItemDetailBinding
 import com.platformscience.smartroute.util.ShipmentInfoReader
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+
 
 class DriverRouteActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var viewModel : DriverRouteViewModel;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,13 +32,7 @@ class DriverRouteActivity : AppCompatActivity() {
 
 
         //Create view model
-        val viewModel: DriverRouteViewModel by viewModels()
-        lifecycleScope.launch{
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                }
-            }
-        }
+        viewModel = ViewModelProvider(this).get(DriverRouteViewModel::class.java)
 
     }
 
@@ -58,6 +48,7 @@ class DriverRouteActivity : AppCompatActivity() {
     }
     private fun loadRoutes(routeRequest: RouteRequest) {
         val routeResults= RouteEngine.getRoutes(routeRequest)
+        viewModel.updateShipmentRoutes(routeResults);
 
 
     }

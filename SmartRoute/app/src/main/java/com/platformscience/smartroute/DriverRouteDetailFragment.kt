@@ -9,21 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.platformscience.smartroute.placeholder.PlaceholderContent
+import androidx.lifecycle.ViewModelProvider
+import com.platformscience.smartroute.data.Driver
+import com.platformscience.smartroute.data.RouteScore
+import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.databinding.FragmentItemDetailBinding
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a [ItemListFragment]
- * in two-pane mode (on larger screen devices) or self-contained
- * on handsets.
+
  */
 class DriverRouteDetailFragment : Fragment() {
 
     /**
-     * The placeholder content this fragment is presenting.
+     * The driver for the route to display
      */
-    private var item: PlaceholderContent.PlaceholderItem? = null
+    private var driverName: String? = null;
+
+    private lateinit var viewModel:DriverRouteViewModel;
 
     lateinit var itemDetailTextView: TextView
     private var toolbarLayout: CollapsingToolbarLayout? = null
@@ -37,8 +39,7 @@ class DriverRouteDetailFragment : Fragment() {
     private val dragListener = View.OnDragListener { v, event ->
         if (event.action == DragEvent.ACTION_DROP) {
             val clipDataItem: ClipData.Item = event.clipData.getItemAt(0)
-            val dragData = clipDataItem.text
-            item = PlaceholderContent.ITEM_MAP[dragData]
+            driverName = clipDataItem.text.toString()
             updateContent()
         }
         true
@@ -47,12 +48,12 @@ class DriverRouteDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = ViewModelProvider(requireActivity()).get(DriverRouteViewModel::class.java);
+
         arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
-                // Load the placeholder content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
-                item = PlaceholderContent.ITEM_MAP[it.getString(ARG_ITEM_ID)]
+            if (it.containsKey(ARG_DRIVER_NAME)) {
+                // Load the driver and route specified by the fragment arguments.
+                driverName = it.getString(ARG_DRIVER_NAME)
             }
         }
     }
@@ -70,25 +71,39 @@ class DriverRouteDetailFragment : Fragment() {
 
         updateContent()
         rootView.setOnDragListener(dragListener)
-
         return rootView
     }
 
     private fun updateContent() {
-        toolbarLayout?.title = item?.content
+        val driverName = this.driverName;
+        if (driverName == null) {
+            toolbarLayout?.title = "Select a Driver"
+            itemDetailTextView.text =""
+        } else {
+            val routeResults = viewModel.getShipmentRoutes().value;
 
-        // Show the placeholder content as text in a TextView.
-        item?.let {
-            itemDetailTextView.text = it.details
+            val driver = Driver(driverName)
+            var shipment: Shipment?= null;
+            var routeScore: RouteScore?= null;
+            routeResults?.let {
+                shipment = routeResults.getOptimalShipment(driver);
+                shipment?.let {
+                    routeScore =routeResults.getRouteScore(driver, shipment!!);
+                }
+            }
+
+            toolbarLayout?.title = "Shipment Details for ${driver}.name "
+            itemDetailTextView.text = shipment?.address ?:"";
+            //itemDetailTextView.text = routeScore?.score.toString() ?:"";
         }
     }
 
     companion object {
         /**
-         * The fragment argument representing the item ID that this fragment
+         * The fragment argument representing the name of the driver this fragment
          * represents.
          */
-        const val ARG_ITEM_ID = "item_id"
+        const val ARG_DRIVER_NAME = "driver_name"
     }
 
     override fun onDestroyView() {

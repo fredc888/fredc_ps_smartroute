@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context="com.platformscience.smartroute.DriverRouteActivity"
-        tools:listitem="@layout/item_list_content" />
+        tools:listitem="@layout/driver_list_content" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

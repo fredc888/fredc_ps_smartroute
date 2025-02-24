@@ -10,12 +10,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"
-        android:name="com.platformscience.smartroute.ItemListFragment"
+        android:name="com.platformscience.smartroute.DriverListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.platformscience.smartroute.DriverRouteActivity"
-        tools:listitem="@layout/item_list_content" />
+        tools:listitem="@layout/driver_list_content" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
