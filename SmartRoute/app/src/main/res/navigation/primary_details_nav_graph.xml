@@ -17,7 +17,7 @@
         android:id="@+id/item_detail_fragment"
         android:name="com.platformscience.smartroute.DriverShipmentDetailFragment"
         android:label="item_detail"
-        tools:layout="@layout/fragment_item_detail">
+        tools:layout="@layout/fragment_shipment_detail">
         <argument
             android:name="item_id"
             android:defaultValue=""

@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.platformscience.smartroute.data.Driver
-import com.platformscience.smartroute.databinding.FragmentItemListBinding
+import com.platformscience.smartroute.databinding.FragmentDriverListBinding
 import com.platformscience.smartroute.databinding.DriverListContentBinding
 
 
@@ -24,7 +24,7 @@ class DriverListFragment : Fragment() {
     private lateinit var viewModel:DriverShipmentViewModel;
 
 
-    private var _binding: FragmentItemListBinding? = null
+    private var _binding: FragmentDriverListBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,7 +34,7 @@ class DriverListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentItemListBinding.inflate(inflater, container, false)
+        _binding = FragmentDriverListBinding.inflate(inflater, container, false)
         return binding.root
 
     }

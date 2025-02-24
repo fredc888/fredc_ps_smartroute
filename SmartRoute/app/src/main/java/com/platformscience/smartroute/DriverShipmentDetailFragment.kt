@@ -1,6 +1,8 @@
 package com.platformscience.smartroute
 
 import android.content.ClipData
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.DragEvent
 import androidx.fragment.app.Fragment
@@ -8,12 +10,14 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProvider
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.ShipmentScore
 import com.platformscience.smartroute.data.Shipment
-import com.platformscience.smartroute.databinding.FragmentItemDetailBinding
+import com.platformscience.smartroute.databinding.FragmentShipmentDetailBinding
 
 /**
 
@@ -28,9 +32,13 @@ class DriverShipmentDetailFragment : Fragment() {
     private lateinit var viewModel:DriverShipmentViewModel;
 
     lateinit var shipmentAddress: TextView
+    lateinit var shipmentScore: TextView
+    lateinit var detailContainer: CoordinatorLayout
+    lateinit var shipmentScoreContainer: LinearLayout
+
     private var toolbarLayout: CollapsingToolbarLayout? = null
 
-    private var _binding: FragmentItemDetailBinding? = null
+    private var _binding: FragmentShipmentDetailBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -63,23 +71,40 @@ class DriverShipmentDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentItemDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentShipmentDetailBinding.inflate(inflater, container, false)
         val rootView = binding.root
 
         toolbarLayout = binding.toolbarLayout
-        shipmentAddress = binding.itemDetail!!
+        shipmentAddress = binding.shipmentAddress!!
+        shipmentScore = binding.shipmentScore!!
+        detailContainer = binding.itemDetailContainer!!
+        shipmentScoreContainer = binding.shipmentScoreContainer!!
 
         updateContent()
         rootView.setOnDragListener(dragListener)
         return rootView
     }
 
+    private fun isDeveloperModeOn(): Boolean {
+        return activity?.getPreferences(Context.MODE_PRIVATE)?.getBoolean("developerMode", true)
+            ?: true
+    }
+
     private fun updateContent() {
         val driverName = this.driverName;
+
+        if (isDeveloperModeOn()) {
+            shipmentScoreContainer.visibility= View.VISIBLE
+        } else {
+            shipmentScoreContainer.visibility= View.INVISIBLE
+        }
+
         if (driverName == null) {
+            detailContainer.visibility= View.INVISIBLE;
             toolbarLayout?.title = "Select a Driver"
             shipmentAddress.text =""
         } else {
+            detailContainer.visibility= View.VISIBLE;
             val routeResults = viewModel.getShipmentRoutes().value;
 
             val driver = Driver(driverName)
@@ -94,7 +119,7 @@ class DriverShipmentDetailFragment : Fragment() {
 
             toolbarLayout?.title = "Shipment Details for ${driver}.name "
             shipmentAddress.text = shipment?.address ?:"";
-            //itemDetailTextView.text = routeScore?.score.toString() ?:"";
+            shipmentScore.text = routeScore?.score.toString() ?:"";
         }
     }
 
