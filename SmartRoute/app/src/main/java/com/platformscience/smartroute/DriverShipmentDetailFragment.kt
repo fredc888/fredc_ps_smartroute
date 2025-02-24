@@ -11,23 +11,23 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.platformscience.smartroute.data.Driver
-import com.platformscience.smartroute.data.RouteScore
+import com.platformscience.smartroute.data.ShipmentScore
 import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.databinding.FragmentItemDetailBinding
 
 /**
 
  */
-class DriverRouteDetailFragment : Fragment() {
+class DriverShipmentDetailFragment : Fragment() {
 
     /**
      * The driver for the route to display
      */
     private var driverName: String? = null;
 
-    private lateinit var viewModel:DriverRouteViewModel;
+    private lateinit var viewModel:DriverShipmentViewModel;
 
-    lateinit var itemDetailTextView: TextView
+    lateinit var shipmentAddress: TextView
     private var toolbarLayout: CollapsingToolbarLayout? = null
 
     private var _binding: FragmentItemDetailBinding? = null
@@ -48,7 +48,7 @@ class DriverRouteDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(DriverRouteViewModel::class.java);
+        viewModel = ViewModelProvider(requireActivity()).get(DriverShipmentViewModel::class.java);
 
         arguments?.let {
             if (it.containsKey(ARG_DRIVER_NAME)) {
@@ -67,7 +67,7 @@ class DriverRouteDetailFragment : Fragment() {
         val rootView = binding.root
 
         toolbarLayout = binding.toolbarLayout
-        itemDetailTextView = binding.itemDetail
+        shipmentAddress = binding.itemDetail!!
 
         updateContent()
         rootView.setOnDragListener(dragListener)
@@ -78,22 +78,22 @@ class DriverRouteDetailFragment : Fragment() {
         val driverName = this.driverName;
         if (driverName == null) {
             toolbarLayout?.title = "Select a Driver"
-            itemDetailTextView.text =""
+            shipmentAddress.text =""
         } else {
             val routeResults = viewModel.getShipmentRoutes().value;
 
             val driver = Driver(driverName)
             var shipment: Shipment?= null;
-            var routeScore: RouteScore?= null;
+            var routeScore: ShipmentScore?= null;
             routeResults?.let {
                 shipment = routeResults.getOptimalShipment(driver);
                 shipment?.let {
-                    routeScore =routeResults.getRouteScore(driver, shipment!!);
+                    routeScore =routeResults.getShipmentScore(driver, shipment!!);
                 }
             }
 
             toolbarLayout?.title = "Shipment Details for ${driver}.name "
-            itemDetailTextView.text = shipment?.address ?:"";
+            shipmentAddress.text = shipment?.address ?:"";
             //itemDetailTextView.text = routeScore?.score.toString() ?:"";
         }
     }

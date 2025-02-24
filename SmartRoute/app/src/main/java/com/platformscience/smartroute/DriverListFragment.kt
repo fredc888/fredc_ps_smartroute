@@ -21,7 +21,7 @@ import com.platformscience.smartroute.databinding.DriverListContentBinding
 
 
 class DriverListFragment : Fragment() {
-    private lateinit var viewModel:DriverRouteViewModel;
+    private lateinit var viewModel:DriverShipmentViewModel;
 
 
     private var _binding: FragmentItemListBinding? = null
@@ -46,7 +46,7 @@ class DriverListFragment : Fragment() {
         // Leaving this not using view binding as it relies on if the view is visible the current
         // layout configuration (layout, layout-sw600dp)
         val itemDetailFragmentContainer: View? = view.findViewById(R.id.item_detail_nav_container)
-        viewModel = ViewModelProvider(requireActivity()).get(DriverRouteViewModel::class.java);
+        viewModel = ViewModelProvider(requireActivity()).get(DriverShipmentViewModel::class.java);
         setupRecyclerView(recyclerView, itemDetailFragmentContainer,
             viewModel=viewModel,
             lifecycleOwner = this)
@@ -56,7 +56,7 @@ class DriverListFragment : Fragment() {
     private fun setupRecyclerView(
         recyclerView: RecyclerView,
         itemDetailFragmentContainer: View?,
-        viewModel: DriverRouteViewModel,
+        viewModel: DriverShipmentViewModel,
         lifecycleOwner: LifecycleOwner
     ) {
 
@@ -73,7 +73,7 @@ class DriverListFragment : Fragment() {
         //private val values: List<PlaceholderContent.PlaceholderItem>,
         private val itemDetailFragmentContainer: View?,
         private val lifecycleOwner: LifecycleOwner,
-        private val viewModel:DriverRouteViewModel
+        private val viewModel:DriverShipmentViewModel
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
         init{
@@ -101,7 +101,7 @@ class DriverListFragment : Fragment() {
                     val item = itemView.tag as Driver
                     val bundle = Bundle()
                     bundle.putString(
-                        DriverRouteDetailFragment.ARG_DRIVER_NAME,
+                        DriverShipmentDetailFragment.ARG_DRIVER_NAME,
                         item.name
                     )
                     if (itemDetailFragmentContainer != null) {

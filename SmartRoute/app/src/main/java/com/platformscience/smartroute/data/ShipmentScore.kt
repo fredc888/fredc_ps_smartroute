@@ -4,7 +4,7 @@ package com.platformscience.smartroute.data
  * A score for a driver/destination's route
  *
  */
-data class RouteScore(
+data class ShipmentScore(
     val driver: Driver,
     val shipment: Shipment,
     val score: Double,

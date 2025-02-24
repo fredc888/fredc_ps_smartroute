@@ -3,7 +3,7 @@ package com.platformscience.smartroute.resolver
 import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteResults
-import com.platformscience.smartroute.data.RouteScoreMap
+import com.platformscience.smartroute.data.ShipmentScoreMap
 import edu.princeton.cs.algs4.AssignmentProblem
 
 /**
@@ -21,7 +21,7 @@ class SSPRouteResolver : RouteResolver {
 
     internal fun createRouteScoreMatrix(drivers:Set<Driver>,
                                         shipments:Set<Shipment>,
-                                        routeScores: RouteScoreMap): Array<DoubleArray> {
+                                        routeScores: ShipmentScoreMap): Array<DoubleArray> {
         val scoreMatrix = Array(drivers.size) { DoubleArray(shipments.size) { 0.0 } }
         drivers.forEachIndexed { driverIndex, driver ->
             shipments.forEachIndexed { destinationIndex, destination ->
@@ -37,7 +37,7 @@ class SSPRouteResolver : RouteResolver {
 
     override fun resolve(drivers:Set<Driver>,
                          shipments:Set<Shipment>,
-                         routeScores: RouteScoreMap): RouteResults {
+                         routeScores: ShipmentScoreMap): RouteResults {
         try {
             val scoreMatrix = createRouteScoreMatrix(drivers,shipments,routeScores);
 
@@ -51,7 +51,7 @@ class SSPRouteResolver : RouteResolver {
             return RouteResults(
                 drivers=drivers,
                 shipments=shipments,
-                routeScores=routeScores,
+                shipmentScores=routeScores,
                 routeIndexes = routes);
         } catch (e: IllegalArgumentException) {
             return RouteResults(

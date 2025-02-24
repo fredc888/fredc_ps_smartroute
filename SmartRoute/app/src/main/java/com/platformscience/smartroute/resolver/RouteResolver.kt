@@ -3,7 +3,7 @@ package com.platformscience.smartroute.resolver
 import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.RouteResults
-import com.platformscience.smartroute.data.RouteScoreMap
+import com.platformscience.smartroute.data.ShipmentScoreMap
 
 /*
  * A RouteResolver uses a provided RouteWeights and finds the optimal route for each driver
@@ -17,5 +17,5 @@ interface RouteResolver {
      */
     fun resolve(drivers:Set<Driver>,
                 shipments:Set<Shipment>,
-                routeScores: RouteScoreMap): RouteResults;
+                routeScores: ShipmentScoreMap): RouteResults;
 }

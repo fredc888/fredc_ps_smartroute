@@ -2,7 +2,7 @@ package com.platformscience.smartroute.scorer
 
 import com.platformscience.smartroute.data.Shipment
 import com.platformscience.smartroute.data.Driver
-import com.platformscience.smartroute.data.RouteScore
+import com.platformscience.smartroute.data.ShipmentScore
 import com.platformscience.smartroute.util.MathUtil
 import com.platformscience.smartroute.util.consonants;
 import com.platformscience.smartroute.util.vowels;
@@ -39,7 +39,7 @@ class BSSScorer : RouteScorer {
      */
 
 
-    override fun score(driver: Driver, shipment: Shipment): RouteScore {
+    override fun score(driver: Driver, shipment: Shipment): ShipmentScore {
         //debugInfo is for debugging and troubleshooting
         //and conditionally assigned if debugging is turned on
 
@@ -79,6 +79,6 @@ class BSSScorer : RouteScorer {
         }
         debugInfo?.put(DEBUG_SCORE,score.toString());
 
-        return RouteScore(driver, shipment,score, debugInfo);
+        return ShipmentScore(driver, shipment,score, debugInfo);
     }
 }

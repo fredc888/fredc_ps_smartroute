@@ -12,16 +12,16 @@ enum class RouteResultCode {
 data class RouteResults(
     val drivers: Set<Driver>,
     val shipments: Set<Shipment>,
-    val routeScores: RouteScoreMap,
+    val shipmentScores: ShipmentScoreMap,
     val resultCode: RouteResultCode = RouteResultCode.SUCCESS,
     val routeIndexes: IntArray? = null,
     val error: Exception? = null
 ) {
     constructor(drivers:Set<Driver>, shipments:Set<Shipment>,
-                routeScores: RouteScoreMap, error: Exception) : this(
+                routeScores: ShipmentScoreMap, error: Exception) : this(
         drivers=drivers,
         shipments=shipments,
-        routeScores=routeScores,
+        shipmentScores=routeScores,
         resultCode = RouteResultCode.FAIL,
         error = error,
         routeIndexes = null
@@ -35,8 +35,8 @@ data class RouteResults(
             return routeIndexes?.size ?: 0;
         }
 
-    fun getRouteScore(driver:Driver, shipment: Shipment):RouteScore? {
-        return routeScores.getRouteScore(driver,shipment);
+    fun getShipmentScore(driver:Driver, shipment: Shipment):ShipmentScore? {
+        return shipmentScores.getRouteScore(driver,shipment);
     }
 
     fun getOptimalShipment(driver:Driver):Shipment {

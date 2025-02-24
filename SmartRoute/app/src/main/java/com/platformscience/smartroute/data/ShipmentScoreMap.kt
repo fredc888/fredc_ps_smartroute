@@ -1,19 +1,18 @@
 package com.platformscience.smartroute.data
 
-data class RouteScoreMap(val scoreMap: LinkedHashMap<Driver,LinkedHashMap<Shipment,RouteScore>> =
+data class ShipmentScoreMap(val scoreMap: LinkedHashMap<Driver,LinkedHashMap<Shipment,ShipmentScore>> =
         LinkedHashMap()) {
 
-
-    fun setRouteScore(driver:Driver, shipment:Shipment, score:RouteScore) {
+    fun setRouteScore(driver:Driver, shipment:Shipment, score:ShipmentScore) {
         var driverRouteScores = scoreMap.get(driver);
         if (driverRouteScores.isNullOrEmpty()) {
-            driverRouteScores = LinkedHashMap<Shipment,RouteScore>();
+            driverRouteScores = LinkedHashMap();
             scoreMap.put(driver,driverRouteScores);
         }
         driverRouteScores.put(shipment,score);
     }
 
-    fun getRouteScore(driver:Driver, shipment: Shipment):RouteScore? {
+    fun getRouteScore(driver:Driver, shipment: Shipment):ShipmentScore? {
         return scoreMap.get(driver)?.get(shipment);
     }
 

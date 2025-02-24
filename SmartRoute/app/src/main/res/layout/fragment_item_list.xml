@@ -16,7 +16,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.platformscience.smartroute.DriverRouteActivity"
+        tools:context="com.platformscience.smartroute.DriverShipmentActivity"
         tools:listitem="@layout/driver_list_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

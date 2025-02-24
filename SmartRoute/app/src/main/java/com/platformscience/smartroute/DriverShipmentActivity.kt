@@ -13,10 +13,10 @@ import com.platformscience.smartroute.databinding.ActivityItemDetailBinding
 import com.platformscience.smartroute.util.ShipmentInfoReader
 
 
-class DriverRouteActivity : AppCompatActivity() {
+class DriverShipmentActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var viewModel : DriverRouteViewModel;
+    private lateinit var viewModel : DriverShipmentViewModel;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class DriverRouteActivity : AppCompatActivity() {
 
 
         //Create view model
-        viewModel = ViewModelProvider(this).get(DriverRouteViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(DriverShipmentViewModel::class.java)
 
     }
 
@@ -47,7 +47,7 @@ class DriverRouteActivity : AppCompatActivity() {
 
     }
     private fun loadRoutes(routeRequest: RouteRequest) {
-        val routeResults= RouteEngine.getRoutes(routeRequest)
+        val routeResults= ShipmentRouteEngine.getShipmentRoutes(routeRequest)
         viewModel.updateShipmentRoutes(routeResults);
 
 
