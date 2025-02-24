@@ -23,6 +23,7 @@ class DriverShipmentActivity : AppCompatActivity() {
 
         val binding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //setSupportActionBar(findViewById(R.id.my_toolbar))
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_item_detail) as NavHostFragment
@@ -57,4 +58,6 @@ class DriverShipmentActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
+
 }
