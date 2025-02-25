@@ -8,12 +8,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.platformscience.smartroute.data.RouteRequest
 import com.platformscience.smartroute.databinding.ActivityItemDetailBinding
-import com.platformscience.smartroute.util.ShipmentInfoReader
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
-
+/**
+ * Application main activity
+ */
 class DriverShipmentActivity : AppCompatActivity() {
+
+    //Default Shipping Info JSON file stored in assets
+    private val DEFAULT_ASSET_SHIPMENTINFO="shipmentinfo.json";
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var viewModel : DriverShipmentViewModel;
@@ -22,7 +27,6 @@ class DriverShipmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setSupportActionBar(findViewById(R.id.my_toolbar))
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_item_detail) as NavHostFragment
@@ -30,32 +34,27 @@ class DriverShipmentActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-
         //Create view model
         viewModel = ViewModelProvider(this).get(DriverShipmentViewModel::class.java)
-
     }
 
     override fun onResume() {
         super.onResume();
-        loadDefaultRoutes();
+        loadDefaultShipmentRoute();
     }
-    private fun loadDefaultRoutes(){
-        //Load shipment info
-        val routeRequest = ShipmentInfoReader.readDefaultShipmentInfoAsset(applicationContext);
-        loadRoutes(routeRequest);
 
-    }
-    private fun loadRoutes(routeRequest: RouteRequest) {
-        val routeResults= ShipmentRouteEngine.getShipmentRoutes(routeRequest)
-        viewModel.updateShipmentRoutes(routeResults);
-
-
-    }
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_item_detail)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    /**
+     * Read the default shipping info JSON and get the shipping routes for it
+     */
+    private fun loadDefaultShipmentRoute() {
+        val assetReader = BufferedReader(InputStreamReader(applicationContext.assets.open(DEFAULT_ASSET_SHIPMENTINFO)));
+        viewModel.loadShipmentRoute(assetReader);
     }
 
 

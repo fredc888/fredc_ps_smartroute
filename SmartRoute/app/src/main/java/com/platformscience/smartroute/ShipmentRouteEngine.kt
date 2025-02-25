@@ -9,17 +9,14 @@ import com.platformscience.smartroute.resolver.RouteResolver
 import com.platformscience.smartroute.resolver.SSPRouteResolver
 import com.platformscience.smartroute.scorer.BSSScorer
 import com.platformscience.smartroute.scorer.RouteScorer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object ShipmentRouteEngine {
 
-    /**
-     * All methods internal for testability with RouteEngineTest
-     */
-
-    internal val resolver: RouteResolver = SSPRouteResolver();
-    internal val scorer: RouteScorer = BSSScorer();
-
-    internal fun getScoreMap(drivers:Set<Driver>, shipments:Set<Shipment>): ShipmentScoreMap {
+    private val resolver: RouteResolver = SSPRouteResolver();
+    private val scorer: RouteScorer = BSSScorer();
+    private fun getScoreMap(drivers:Set<Driver>, shipments:Set<Shipment>): ShipmentScoreMap {
         val routeScores = ShipmentScoreMap();
         drivers.forEach{ driver ->
             shipments.forEach { shipment ->
@@ -30,19 +27,16 @@ object ShipmentRouteEngine {
         return routeScores;
     }
 
-    internal fun resolveRoutes(drivers:Set<Driver>,
+    private fun resolveRoutes(drivers:Set<Driver>,
                                shipments:Set<Shipment>,
                                routeScores:ShipmentScoreMap): RouteResults {
         return resolver.resolve(drivers, shipments, routeScores);
     }
 
-    fun getShipmentRoutes(request:RouteRequest):RouteResults {
-        val routeScores = getScoreMap(request.drivers, request.shipments);
-        val routeResults = resolveRoutes(request.drivers,request.shipments,routeScores);
-        return routeResults;
+    suspend fun getShipmentRoutes(request:RouteRequest): RouteResults {
+        return withContext(Dispatchers.IO) {
+            val routeScores = getScoreMap(request.drivers, request.shipments);
+            resolveRoutes(request.drivers, request.shipments, routeScores);
+        }
     }
-
-
-
-
 }

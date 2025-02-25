@@ -11,13 +11,13 @@ import com.platformscience.smartroute.resolver.SSPRouteResolver
 /**
  * Tests for the BSSScorer
  */
-class RouteEngineTest {
+class ShipmentRouteEngineTest {
 
   @Test
   fun testGetScoreMap() {
       val drivers = BssTestData.testDrivers.toSet();
       val shipments = BssTestData.testShipments.toSet();
-      val scoreMap = RouteEngine.getScoreMap(drivers,shipments);
+      val scoreMap = ShipmentRouteEngine.getScoreMap(drivers,shipments);
       System.out.println("Score Map "  + scoreMap);
   }
 
@@ -25,7 +25,7 @@ class RouteEngineTest {
     fun testResolver() {
         val drivers = BssTestData.testDrivers.toSet();
         val shipments = BssTestData.testShipments.toSet();
-        val scoreMap = RouteEngine.getScoreMap(drivers,shipments);
+        val scoreMap = ShipmentRouteEngine.getScoreMap(drivers,shipments);
 
         val resolver = SSPRouteResolver();
         val scoreMatrix = resolver.createRouteScoreMatrix(drivers,shipments,scoreMap);
@@ -38,7 +38,7 @@ class RouteEngineTest {
         val shipments = BssTestData.testShipments.toSet();
 
         val routeRequest = RouteRequest(drivers,shipments);
-        val results = RouteEngine.getRoutes(routeRequest);
+        val results = ShipmentRouteEngine.getShipmentRoutes(routeRequest);
         System.out.println("route results"  + results.routeIndexes.contentToString());
     }
 
@@ -48,10 +48,10 @@ class RouteEngineTest {
         val shipments = BssTestData.testShipments.toSet();
 
         val routeRequest = RouteRequest(drivers,shipments);
-        val results = RouteEngine.getRoutes(routeRequest);
+        val results = ShipmentRouteEngine.getShipmentRoutes(routeRequest);
         drivers.forEach { driver->
             val shipment  = results.getOptimalShipment(driver);
-            System.out.println(" ${driver.name} ==>  ${shipment.address} : Route Score: ${results.getRouteScore(driver,shipment)?.score}" );
+            System.out.println(" ${driver.name} ==>  ${shipment.address} : Route Score: ${results.getShipmentScore(driver,shipment)?.score}" );
         }
     }
 }

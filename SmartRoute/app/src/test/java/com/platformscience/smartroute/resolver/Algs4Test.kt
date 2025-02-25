@@ -35,6 +35,47 @@ class Algs4Test {
         checkAssignmentResults(assignmentEngine,n,expectedAssignments);
     }
 
+
+    @Test
+    fun assignmentTest_5x5_max() {
+
+        val weight = arrayOf(
+            doubleArrayOf(18.0-10.0, 18.0-5.0, 18.0-13.0, 18.0-15.0, 18.0-16.0),
+            doubleArrayOf(18.0-3.0, 18.0-9.0, 18.0-18.0, 18.0-13.0, 18.0-6.0),
+            doubleArrayOf(18.0-10.0, 18.0-7.0, 18.0-2.0, 18.0-2.0, 18.0-2.0),
+            doubleArrayOf(18.0-7.0, 18.0-11.0, 18.0-9.0, 18.0-7.0, 18.0-12.0),
+            doubleArrayOf(18.0-7.0, 18.0-9.0, 18.0-10.0, 18.0-4.0, 18.0-12.0)
+        )
+        val n = weight.size
+
+        //Solution: task assignments to each worker
+        val expectedAssignments= arrayOf(3,2,0,1,4)
+
+        //Run test
+        var assignmentEngine = AssignmentProblem(weight);
+        checkAssignmentResults(assignmentEngine,n,expectedAssignments);
+    }
+
+    @Test
+    fun assignmentTest_5x5_maximize_cost() {
+
+        val weight = arrayOf(
+            doubleArrayOf(-10.0, -5.0, -13.0, -15.0, -16.0),
+            doubleArrayOf(-3.0, -9.0, -18.0, -13.0, -6.0),
+            doubleArrayOf(-10.0, -7.0, -2.0, -2.0, -2.0),
+            doubleArrayOf(-7.0, -11.0, -9.0, -7.0, -12.0),
+            doubleArrayOf(-7.0, -9.0, -10.0, -4.0, -12.0)
+        )
+
+        val n = weight.size
+
+        //Solution: task assignments to each worker
+        val expectedAssignments= arrayOf(3,2,0,1,4)
+        //Run test
+        var assignmentEngine = AssignmentProblem(weight);
+        checkAssignmentResults(assignmentEngine,n,expectedAssignments);
+    }
+
     /**
      * Test the Assignment Problem engine from Algs4.jar
 \    * 4x4 test

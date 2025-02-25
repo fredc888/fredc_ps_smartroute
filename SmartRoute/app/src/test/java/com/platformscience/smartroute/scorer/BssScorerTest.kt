@@ -14,7 +14,7 @@ import com.platformscience.smartroute.BssTestData.shipmentTestData;
 
 import com.platformscience.smartroute.BssTestData;
 import com.platformscience.smartroute.BssTestData.KEY_GCF
-import com.platformscience.smartroute.data.RouteScore
+import com.platformscience.smartroute.data.ShipmentScore
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 
@@ -69,7 +69,7 @@ class BssScorerTest {
         }
     }
 
-    fun checkScore(driver:Driver, shipment:Shipment, score:RouteScore) {
+    fun checkScore(driver:Driver, shipment:Shipment, score:ShipmentScore) {
         //Check the score debug info is available
         System.out.println("debugInfo " + score.debugInfo);
         assertNotNull("scorer debug info not available", score.debugInfo);
@@ -122,7 +122,7 @@ System.out.println();
 
     }
 
-    private fun isDebugInfoPropertySet(propertyKey:String, score:RouteScore) : Boolean{
+    private fun isDebugInfoPropertySet(propertyKey:String, score:ShipmentScore) : Boolean{
         return !score.debugInfo!!.get(propertyKey).isNullOrEmpty();
     }
 

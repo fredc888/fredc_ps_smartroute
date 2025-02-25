@@ -15,25 +15,14 @@ import java.net.URL
  * Parse ShipmentInfo Json file into DataObjects
  */
 object ShipmentInfoReader {
-    val DEFAULT_ASSET_SHIPMENTINFO="shipmentinfo.json";
 
     fun readShipmentInfo(url:URL):RouteRequest {
         val reader = BufferedReader(InputStreamReader(url.openStream()));
         return readShipmentInfo(reader);
     }
 
-    fun readDefaultShipmentInfoAsset(context:Context):RouteRequest {
-        val assetReader = BufferedReader(InputStreamReader(context.assets.open(DEFAULT_ASSET_SHIPMENTINFO)));
-        return readShipmentInfo(assetReader);
-    }
-
-    /*
-    fun readShipmentInfo(file:File): RouteRequest {
-        return readShipmentInfo(BufferedReader(file.reader()));
-    }
-    */
-
-    private fun readShipmentInfo(shipmentInfoReader:BufferedReader):RouteRequest{
+    
+    fun readShipmentInfo(shipmentInfoReader:BufferedReader):RouteRequest{
         try {
              val gson = Gson();
             val shipmentInfo: ShipmentInfo = gson.fromJson(shipmentInfoReader, ShipmentInfo::class.java);

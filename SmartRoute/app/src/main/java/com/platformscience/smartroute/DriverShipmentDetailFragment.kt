@@ -117,7 +117,7 @@ class DriverShipmentDetailFragment : Fragment() {
                 }
             }
 
-            toolbarLayout?.title = "Shipment Details for ${driver}.name "
+            toolbarLayout?.title =  getString(R.string.label_shipment_details,driverName)
             shipmentAddress.text = shipment?.address ?:"";
             shipmentScore.text = routeScore?.score.toString() ?:"";
         }

@@ -8,12 +8,9 @@
     <fragment
         android:id="@+id/item_list_fragment"
         android:name="com.platformscience.smartroute.DriverListFragment"
-        android:label="@string/title_toolbar">
+        android:label="@string/title_driver_list">
         <action
             android:id="@+id/show_item_detail"
-            app:destination="@id/item_detail_fragment" />
-        <action
-            android:id="@+id/show_preferences"
             app:destination="@id/item_detail_fragment" />
 
 
@@ -21,11 +18,8 @@
     <fragment
         android:id="@+id/item_detail_fragment"
         android:name="com.platformscience.smartroute.DriverShipmentDetailFragment"
-        android:label="item_detail"
+        android:label="@string/title_shipment_details"
         tools:layout="@layout/fragment_shipment_detail">
-        <argument
-            android:name="item_id"
-            android:defaultValue=""
-            app:argType="string" />
+
     </fragment>
 </navigation>
