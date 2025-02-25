@@ -1,11 +1,13 @@
 package com.platformscience.smartroute
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.ImageButton
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -104,6 +106,8 @@ class DriverShipmentActivity : AppCompatActivity() {
     }
 
     private fun loadShipmentRouteFromUrl(){
+        LoadShipmentInfoFragment(viewModel).show(supportFragmentManager,
+            "LOAD_SHIPMENT_ROUTE")
 
     }
 

@@ -7,7 +7,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_list"
-        android:name="com.platformscience.smartroute.ItemListFragment"
+        android:name="com.platformscience.smartroute.DriverListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/container_margin"

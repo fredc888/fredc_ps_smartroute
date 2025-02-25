@@ -9,6 +9,6 @@
     <string name="label_developer_mode_turn_off">Turn off developer mode</string>
     <string name="label_load">Load</string>
     <string name="label_more_items">...</string>
-    <string name="label_load_defaults">Load Defaults</string>
+    <string name="label_load_defaults">Load defaults</string>
 
 </resources>
