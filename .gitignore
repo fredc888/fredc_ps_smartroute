@@ -12,7 +12,8 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
-*.apk
+SmartRoute/*.apk
+
 output.json
 
 # IntelliJ
