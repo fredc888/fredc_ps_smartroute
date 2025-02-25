@@ -2,8 +2,8 @@ package com.platformscience.smartroute
 
 import android.content.ClipData
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.DragEvent
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.platformscience.smartroute.data.Driver
 import com.platformscience.smartroute.data.ShipmentScore
@@ -80,24 +81,31 @@ class DriverShipmentDetailFragment : Fragment() {
         detailContainer = binding.itemDetailContainer!!
         shipmentScoreContainer = binding.shipmentScoreContainer!!
 
+        // Create the observer which updates the UI.
+        val developerModeOnObserver = Observer<Boolean> { isDeveloperModeOn ->
+            Log.d("DriverShipmentDetailFragment", "DeveleporModeObserver: state changed")
+            updateDeveloperContent();
+        }
+        viewModel.getDeveloperMode().observe(this, developerModeOnObserver)
+
+
         updateContent()
         rootView.setOnDragListener(dragListener)
         return rootView
     }
 
-    private fun isDeveloperModeOn(): Boolean {
-        return activity?.getPreferences(Context.MODE_PRIVATE)?.getBoolean("developerMode", true)
-            ?: true
+    private fun updateDeveloperContent() {
+        val isDeveloperModeOn = viewModel.getDeveloperMode().value?:false
+        if (isDeveloperModeOn)
+            shipmentScoreContainer.visibility= View.VISIBLE
+        else
+            shipmentScoreContainer.visibility = View.INVISIBLE
     }
 
     private fun updateContent() {
         val driverName = this.driverName;
 
-        if (isDeveloperModeOn()) {
-            shipmentScoreContainer.visibility= View.VISIBLE
-        } else {
-            shipmentScoreContainer.visibility= View.INVISIBLE
-        }
+        updateDeveloperContent();
 
         if (driverName == null) {
             detailContainer.visibility= View.INVISIBLE;

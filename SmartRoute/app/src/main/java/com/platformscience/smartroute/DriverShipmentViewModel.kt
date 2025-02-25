@@ -1,5 +1,6 @@
 package com.platformscience.smartroute
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,14 @@ import java.io.BufferedReader
 
 class DriverShipmentViewModel : ViewModel(){
     private val routeResults: MutableLiveData<RouteResults> = MutableLiveData();
+    private val developerModeOn: MutableLiveData<Boolean> = MutableLiveData();
 
+    init {
+        developerModeOn.value=false;
+    }
+    fun getDeveloperMode():LiveData<Boolean> {
+        return developerModeOn;
+    }
 
     fun getShipmentRoutes():LiveData<RouteResults>{
         return routeResults;
@@ -25,5 +33,9 @@ class DriverShipmentViewModel : ViewModel(){
             val result = ShipmentRouteEngine.getShipmentRoutes(routeRequest)
             routeResults.value=result;
         }
+    }
+
+    fun setDeveloperModeOn(devModeOn: Boolean) {
+        developerModeOn.value=devModeOn
     }
 }
