@@ -12,49 +12,59 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
+import java.io.IOException
 import java.net.URL
 
-class DriverShipmentViewModel : ViewModel(){
+class DriverShipmentViewModel : ViewModel() {
     private val routeResults: MutableLiveData<RouteResults> = MutableLiveData();
     private val developerModeOn: MutableLiveData<Boolean> = MutableLiveData();
 
     init {
-        developerModeOn.value=false;
+        developerModeOn.value = false;
     }
-    fun getDeveloperMode():LiveData<Boolean> {
+
+    fun getDeveloperMode(): LiveData<Boolean> {
         return developerModeOn;
     }
 
-    fun getShipmentRoutes():LiveData<RouteResults>{
+    fun getShipmentRoutes(): LiveData<RouteResults> {
         return routeResults;
     }
 
-    fun loadShipmentRoute(url:URL) {
+    fun loadShipmentRoute(url: URL) {
         viewModelScope.launch {
-            //Read the Shipment Info from the BufferedReader into a RouteRequest object
-            val routeRequest = readShipmentInfoFromUrl(url);
-            val result = ShipmentRouteEngine.getShipmentRoutes(routeRequest)
-            routeResults.value=result;
+            try {
+                val routeRequest = readShipmentInfoFromUrl(url);
+                val result = ShipmentRouteEngine.getShipmentRoutes(routeRequest)
+                routeResults.value = result;
+            } catch (e: IOException) {
+                Log.e("DriverShipmentViewModel", "loadShipmentRoute error", e);
+            }
         }
     }
 
-    suspend fun readShipmentInfoFromUrl(url:URL): RouteRequest {
-        return withContext(Dispatchers.IO) {
-            ShipmentInfoReader.readShipmentInfo(url);
-        }
-    }
 
-    fun loadShipmentRoute(shipmentInfoReader:BufferedReader) {
+    fun loadShipmentRoute(shipmentInfoReader: BufferedReader) {
         // Create a new coroutine on the UI thread
         viewModelScope.launch {
-            //Read the Shipment Info from the BufferedReader into a RouteRequest object
-            val routeRequest = ShipmentInfoReader.readShipmentInfo(shipmentInfoReader);
-            val result = ShipmentRouteEngine.getShipmentRoutes(routeRequest)
-            routeResults.value=result;
+            try {
+                //Read the Shipment Info from the BufferedReader into a RouteRequest object
+                val routeRequest = ShipmentInfoReader.readShipmentInfo(shipmentInfoReader);
+                val result = ShipmentRouteEngine.getShipmentRoutes(routeRequest)
+                routeResults.value = result;
+            } catch (e: IOException) {
+                Log.e("DriverShipmentViewModel", "loadShipmentRoute error", e);
+            }
         }
     }
 
     fun setDeveloperModeOn(devModeOn: Boolean) {
-        developerModeOn.value=devModeOn
+        developerModeOn.value = devModeOn
+    }
+
+    private suspend fun readShipmentInfoFromUrl(url: URL): RouteRequest {
+        return withContext(Dispatchers.IO) {
+            ShipmentInfoReader.readShipmentInfo(url);
+        }
     }
 }
