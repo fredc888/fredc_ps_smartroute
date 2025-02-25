@@ -5,13 +5,17 @@ package com.platformscience.smartroute.data
  *
  */
 data class ShipmentScore(
-    val driver: Driver,
-    val shipment: Shipment,
+    val driverKey: String,
+    val shipmentKey: String,
     val score: Double,
+
+    //For debugging only: If debugging is enabled, this field contains
+    //key/values properties added by the route engine to help debugging
+    //white processing the request
     val debugInfo:Map<String,String>?){
-    constructor(driver: Driver, shipment:Shipment, score: Double) : this(
-        driver=driver,
-        shipment=shipment,
+    constructor(driverKey: String, shipmentKey:String, score: Double) : this(
+        driverKey=driverKey,
+        shipmentKey=shipmentKey,
         score = score,
         debugInfo = null
     );

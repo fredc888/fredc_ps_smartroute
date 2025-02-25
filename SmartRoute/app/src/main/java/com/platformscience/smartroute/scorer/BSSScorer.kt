@@ -79,6 +79,6 @@ class BSSScorer : RouteScorer {
         }
         debugInfo?.put(DEBUG_SCORE,score.toString());
 
-        return ShipmentScore(driver, shipment,score, debugInfo);
+        return ShipmentScore(driver.key, shipment.key,score, debugInfo);
     }
 }

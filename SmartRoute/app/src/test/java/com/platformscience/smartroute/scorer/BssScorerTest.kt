@@ -57,14 +57,18 @@ class BssScorerTest {
         scorer.DEBUG = true;
 
 
-
+        //TODO: Do the first 3 in the data set only.
+        val maxDataSets=3;
+        //Not all datasets have been completely filled out
         for ((driverIndex,driverKey) in driverTestData.keys.withIndex()) {
             for ((shipmentIndex, shipmentKey) in shipmentTestData.keys.withIndex()) {
-                val driver = Driver(driverKey);
-                val shipment = Shipment(shipmentKey);
-                val score = scorer.score(driver, shipment);
-                System.out.println("Driver and Shipment Index ${driverIndex}: ${shipmentIndex}")
-                checkScore(driver, shipment, score);
+                if (driverIndex<maxDataSets && shipmentIndex<maxDataSets) {
+                    val driver = Driver(driverKey)
+                    val shipment = Shipment(shipmentKey);
+                    val score = scorer.score(driver, shipment);
+                    System.out.println("Driver and Shipment Index ${driverIndex}: ${shipmentIndex}")
+                    checkScore(driver, shipment, score);
+                }
             }
         }
     }
@@ -117,7 +121,8 @@ System.out.println();
         val expectedGCF = BssTestData.getMappedData(driver.name,shipment.address, KEY_GCF);
         val actualGCF = score.debugInfo?.get(BSSScorer.DEBUG_GCF);
         System.out.println("Getting GCF for Driver ${driver.name}, Shipment ${shipment.address} ");
-        assertEquals ("Driver ${driver.name}, Shipment ${shipment.address} unexpected GCF", expectedGCF, actualGCF);
+        assertEquals ("Driver ${driver.name}, Shipment ${shipment.address} unexpected GCF",
+            expectedGCF, actualGCF);
 
 
     }

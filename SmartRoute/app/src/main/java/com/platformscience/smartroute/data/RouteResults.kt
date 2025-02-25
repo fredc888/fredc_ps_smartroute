@@ -1,15 +1,21 @@
 package com.platformscience.smartroute.data
 
 
+/**
+ * Status returned from RouteEngine to indicate success or failure
+ */
 enum class RouteResultCode {
     SUCCESS,
     FAIL
 }
 
+
 /**
- * @pqram resultCode:
+ * ShippingRoute Result returned by the RouteEngine
  */
 data class RouteResults(
+
+
     val drivers: Set<Driver>,
     val shipments: Set<Shipment>,
     val shipmentScores: ShipmentScoreMap,
@@ -35,25 +41,41 @@ data class RouteResults(
             return routeIndexes?.size ?: 0;
         }
 
-    fun getShipmentScore(driver:Driver, shipment: Shipment):ShipmentScore? {
-        return shipmentScores.getRouteScore(driver,shipment);
+
+    /**
+     * Returns the shipment score for a driver and shipment
+     */
+    fun getShipmentScore(driverKey:String, shipmentKey: String):ShipmentScore? {
+        return shipmentScores.getRouteScore(driverKey,shipmentKey);
     }
 
-    fun getOptimalShipment(driver:Driver):Shipment {
-        val driverIndex = drivers.indexOf(driver);
-        val destinationIndex = getOptimalShipment(driverIndex);
-        return shipments.elementAt(destinationIndex);
+    private fun findDriverIndex(driverKey:String):Int? {
+        drivers.forEachIndexed { driverIndex,driver ->
+            if (driverKey.equals(driver.key)) {
+                return driverIndex;
+            }
+        }
+        return null;
+    }
+    /**
+     * Returns the assigned optimal shipment route for the specified driver
+     */
+    fun getOptimalShipment(driverKey:String):Shipment? {
+        val driverIndex = findDriverIndex(driverKey);
+        driverIndex?.let{
+            val destinationIndex = getOptimalShipment(driverIndex);
+            destinationIndex?.let {
+                return shipments.elementAt(destinationIndex);
+            }
+        }
+        return null;
     }
 
     /**
-     * Returns the route of the specified driver
+     * Returns the route of the specified driver index in the driver set
      */
-    fun getOptimalShipment(driverIndex: Int): Int {
-        var result= routeIndexes?.get(driverIndex);
-        if (result == null) {
-            result = -1;
-        }
-        return result;
+    fun getOptimalShipment(driverIndex: Int): Int? {
+        return routeIndexes?.get(driverIndex);
     }
 
 }

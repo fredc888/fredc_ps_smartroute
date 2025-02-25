@@ -1,19 +1,24 @@
 package com.platformscience.smartroute.data
 
-data class ShipmentScoreMap(val scoreMap: LinkedHashMap<Driver,LinkedHashMap<Shipment,ShipmentScore>> =
+/**
+ * Manages a the shipment scores for all driver and shipment combintions.
+ * This object is optimized for retrivals based on the order of
+ * driver->shipment
+ */
+data class ShipmentScoreMap(val scoreMap: LinkedHashMap<String,LinkedHashMap<String,ShipmentScore>> =
         LinkedHashMap()) {
 
-    fun setRouteScore(driver:Driver, shipment:Shipment, score:ShipmentScore) {
-        var driverRouteScores = scoreMap.get(driver);
+    fun setRouteScore(driverKey:String, shipmentKey:String, score:ShipmentScore) {
+        var driverRouteScores = scoreMap.get(driverKey);
         if (driverRouteScores.isNullOrEmpty()) {
             driverRouteScores = LinkedHashMap();
-            scoreMap.put(driver,driverRouteScores);
+            scoreMap.put(driverKey,driverRouteScores);
         }
-        driverRouteScores.put(shipment,score);
+        driverRouteScores.put(shipmentKey,score);
     }
 
-    fun getRouteScore(driver:Driver, shipment: Shipment):ShipmentScore? {
-        return scoreMap.get(driver)?.get(shipment);
+    fun getRouteScore(driverKey:String, shipmentKey: String):ShipmentScore? {
+        return scoreMap.get(driverKey)?.get(shipmentKey);
     }
 
 

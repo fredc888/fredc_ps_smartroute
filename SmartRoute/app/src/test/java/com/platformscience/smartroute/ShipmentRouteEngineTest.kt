@@ -38,7 +38,7 @@ class ShipmentRouteEngineTest {
         val shipments = BssTestData.testShipments.toSet();
 
         val routeRequest = RouteRequest(drivers,shipments);
-        val results = ShipmentRouteEngine.getShipmentRoutes(routeRequest);
+        val results = ShipmentRouteEngine._getShipmentRoutes(routeRequest);
         System.out.println("route results"  + results.routeIndexes.contentToString());
     }
 
@@ -48,10 +48,10 @@ class ShipmentRouteEngineTest {
         val shipments = BssTestData.testShipments.toSet();
 
         val routeRequest = RouteRequest(drivers,shipments);
-        val results = ShipmentRouteEngine.getShipmentRoutes(routeRequest);
+        val results = ShipmentRouteEngine._getShipmentRoutes(routeRequest);
         drivers.forEach { driver->
-            val shipment  = results.getOptimalShipment(driver);
-            System.out.println(" ${driver.name} ==>  ${shipment.address} : Route Score: ${results.getShipmentScore(driver,shipment)?.score}" );
+            val shipment  = results.getOptimalShipment(driver.key);
+            System.out.println(" ${driver.name} ==>  ${shipment?.address} : Route Score: ${results.getShipmentScore(driver.key,shipment?.key?:"")?.score}" );
         }
     }
 }

@@ -25,7 +25,7 @@ class SSPRouteResolver : RouteResolver {
         val scoreMatrix = Array(drivers.size) { DoubleArray(shipments.size) { 0.0 } }
         drivers.forEachIndexed { driverIndex, driver ->
             shipments.forEachIndexed { destinationIndex, destination ->
-                val routeScore= routeScores.getRouteScore(driver,destination);
+                val routeScore= routeScores.getRouteScore(driver.key,destination.key);
                 if (routeScore != null) {
                     scoreMatrix[driverIndex][destinationIndex]=transformScore(routeScore.score);
                 }

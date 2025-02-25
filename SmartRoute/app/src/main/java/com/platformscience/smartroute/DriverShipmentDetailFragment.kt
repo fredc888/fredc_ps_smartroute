@@ -115,13 +115,12 @@ class DriverShipmentDetailFragment : Fragment() {
             detailContainer.visibility= View.VISIBLE;
             val routeResults = viewModel.getShipmentRoutes().value;
 
-            val driver = Driver(driverName)
             var shipment: Shipment?= null;
             var routeScore: ShipmentScore?= null;
             routeResults?.let {
-                shipment = routeResults.getOptimalShipment(driver);
+                shipment = routeResults.getOptimalShipment(driverName);
                 shipment?.let {
-                    routeScore =routeResults.getShipmentScore(driver, shipment!!);
+                    routeScore =routeResults.getShipmentScore(driverName, shipment!!.key);
                 }
             }
 

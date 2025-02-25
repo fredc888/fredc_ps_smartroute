@@ -16,12 +16,14 @@ object ShipmentRouteEngine {
 
     private val resolver: RouteResolver = SSPRouteResolver();
     private val scorer: RouteScorer = BSSScorer();
-    private fun getScoreMap(drivers:Set<Driver>, shipments:Set<Shipment>): ShipmentScoreMap {
+
+    //Internal for unit testing
+    internal fun getScoreMap(drivers:Set<Driver>, shipments:Set<Shipment>): ShipmentScoreMap {
         val routeScores = ShipmentScoreMap();
         drivers.forEach{ driver ->
             shipments.forEach { shipment ->
                 val score = scorer.score(driver,shipment);
-                routeScores.setRouteScore(driver,shipment,score);
+                routeScores.setRouteScore(driver.key,shipment.key,score);
             }
         }
         return routeScores;
@@ -35,8 +37,13 @@ object ShipmentRouteEngine {
 
     suspend fun getShipmentRoutes(request:RouteRequest): RouteResults {
         return withContext(Dispatchers.IO) {
-            val routeScores = getScoreMap(request.drivers, request.shipments);
-            resolveRoutes(request.drivers, request.shipments, routeScores);
+            _getShipmentRoutes(request)
         }
+    }
+
+    fun _getShipmentRoutes(request:RouteRequest): RouteResults {
+            val routeScores = getScoreMap(request.drivers, request.shipments);
+            return resolveRoutes(request.drivers, request.shipments, routeScores);
+
     }
 }
